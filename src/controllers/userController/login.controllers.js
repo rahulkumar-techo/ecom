@@ -1,6 +1,8 @@
 import Response from "../../../Handler/Response.js";
+import generateToken from "../../configs/jwtToken.js";
+import generateRefreshToken from "../../configs/refreshToken.js";
 import User from "../../models/user.model.js";
-import jwt from "jsonwebtoken";
+
 
 const loginUser = async (req, res, next) => {
   const { email, password } = req.body;
@@ -23,27 +25,18 @@ const loginUser = async (req, res, next) => {
       return res.status(400).json(new Response(false, 400, `Invalid password`));
     }
 
-    // Create JWT token
-    const token = jwt.sign({ userId: foundUser._id }, process.env.JWT_SECRET);
-    console.log(token);
+    // Generate refresh token and update it in the user document
+    const refreshToken = generateRefreshToken(foundUser?.id);
+    const updateUser = await User.findByIdAndUpdate(foundUser.id, { refreshToken }, { new: true });
 
-    // Check the tokens Limit
-    const maxTokenLimit = 3;
-    if (foundUser.tokens.length >= maxTokenLimit) {
-      foundUser.tokens.shift();
+    if (!refreshToken) {
+      return res.status(500).json(new Response(false, 500, `Token not found while login`));
     }
 
-    // Push the new token into the tokens array
-    foundUser.tokens.push({ token });
-
-    // Save the user document to persist the changes
-    await foundUser.save();
-
     // Store the token in a cookie
-    const expirationDate = new Date(Date.now() + 9000000); // 15 minutes from now
-    res.cookie("jwtToken", token, { expires: expirationDate, httpOnly: false });
-
-    console.log("User has logged in successfully 🍀");
+    const expirationDate = new Date(Date.now() + 9000000);
+    res.cookie("refreshToken", refreshToken, { expires: expirationDate, httpOnly: false });
+    console.log(`User has logged in successfully 🍀 `);
 
     // Return a response indicating a successful login
     return res.status(200).json(new Response(true, 200, { userId: foundUser }));
@@ -54,5 +47,7 @@ const loginUser = async (req, res, next) => {
       .json(new Response(false, 500, error.message || "Internal Server Error"));
   }
 };
+
+
 
 export default loginUser;

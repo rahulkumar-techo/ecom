@@ -1,32 +1,37 @@
 import Response from "../../../Handler/Response.js";
 import User from "../../models/user.model.js";
 
-
-const updateUser = async(req,res,next) =>{
-
-    const id= req.user.userId;
-    const {username,email,phone} =req.body;
-
-    try {
-        if(!username || !email ||!phone){
-            return new Response(false,400,"Invalid input")
-        }
-
-      const user = await User.findByIdAndUpdate(id,{
-        username,email,phone
-      });
-  
-      if (!user) {
-        console.log("User not found");
-        return res.status(404).json(new Response(false, 404, "User not found"));
-      }
-  
-      const response = new Response(true, 200, `user update ${id}`);
-      return res.status(200).json(response);
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json(new Response(false, 500, "Internal Server Error"));
+const updateUser = async (req, res) => {
+  try {
+    // Ensure req.user is defined and has an 'id' property
+    if (!req.user || !req.user._id) {
+      return res.status(401).json(new Response(false, 401, "Unauthorized"));
     }
-}
+
+    const userId = req.user.id; // Assuming req.user contains the user object
+    const { username, email, phone } = req.body;
+
+    console.log(userId); // Logging the user ID for verification purposes
+
+    if (!username || !email || !phone) {
+      return res.status(400).json(new Response(false, 400, "Invalid input"));
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(userId, {
+      username,
+      email,
+      phone,
+    }, { new: true });
+
+    if (!updatedUser) {
+      return res.status(404).json(new Response(false, 404, "User not found"));
+    }
+
+    new Response(true, 200, `User ${userId} updated successfully`).send(res);
+  } catch (error) {
+    console.error("Error during updateUser:", error);
+    res.status(500).json(new Response(false, 500, "Internal Server Error & email shold be unique"));
+  }
+};
 
 export default updateUser;

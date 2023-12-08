@@ -1,25 +1,35 @@
 // Import All files
-import Response from "./Handler/Response.js";
 import app from "./app.js";
 import db_connection from "./src/configs/db.js";
-const port = process.env.PORT;
-import router from "./src/routers/auth.routers.js";
-import express from "express"
-import expressAsyncHandler from "express-async-handler";
+import express from "express";
 import cookieParser from "cookie-parser";
+import router from "./src/routers/auth.routers.js";
+import productCatRouter from "./src/routers/blogProductCategory.router.js";
 
-// use middlewares
+const port = process.env.PORT;
+
+// Establish database connection
+db_connection();
+
+// Use middlewares
 app.use(cookieParser());
 app.use(express.json());
-app.use(express.urlencoded({extended:false}));
+app.use(express.urlencoded({ extended: false }));
+
+// Use routers
 app.use("/api/v1", router);
-app.use(expressAsyncHandler)
+app.use("/api/v1/blog-category", productCatRouter);
 
+// Error handler middleware for unhandled errors
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ success: false, message: "Internal Server Error" });
+});
 
-db_connection();
+// Start the server
 app.listen(port, () => {
   console.log({
-    msg: `server successfully running on`,
+    msg: "Server successfully running on",
     port: port,
   });
 });

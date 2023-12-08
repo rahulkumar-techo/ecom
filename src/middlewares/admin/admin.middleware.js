@@ -1,19 +1,24 @@
+import expressAsyncHandler from "express-async-handler";
+import Response from "../../../Handler/Response.js";
 import User from "../../models/user.model.js";
-import Response from "../../../Handler/Response.js"
 
-const isAdmin = async (req, res, next) => {
-  // already set in auth.middleware file
+const isAdmin = expressAsyncHandler(async (req, res, next) => {
   const { email } = req.user;
+
   try {
-    const adminUser = User.findOne({ email });
-    if (adminUser.role !== "admin") {
-      throw new Error("you are not a admin");
+    const adminUser = await User.findOne({ email });
+
+    if (!adminUser || adminUser.role !== "admin") {
+      return new Response(false, 401, "Not a valid admin user").send(res);
     } else {
+      console.log("Admin successfully logged in");
       next();
     }
   } catch (error) {
-    new Response(false,500,`Admin auth crashed`)
+    res
+      .status(500)
+      .json(new Response(false, 500, `Admin auth crashed: ${error.message}`));
   }
-};
+});
 
 export default isAdmin;

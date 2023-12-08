@@ -22,10 +22,18 @@ const UserSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      default: "user",
+      default: "admin",
+    },
+    isBlocked: {
+      type: Boolean,
+      default: false,
     },
     cart: {
-      type: [],
+      type: Array,
+      default: [],
+    },
+    refreshToken: {
+      type: String,
     },
     address: [
       {
@@ -34,14 +42,7 @@ const UserSchema = new mongoose.Schema(
       },
     ],
     wishlist: [{ type: Schema.Types.ObjectId, ref: "product" }],
-    tokens: [
-      {
-        token: {
-          type: String,
-         
-        }
-      }
-    ],
+
   },
   {
     timestamps: true,
@@ -68,8 +69,6 @@ UserSchema.pre("save", async function (next) {
 UserSchema.methods.comparePassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
-
-
 
 const User = mongoose.model("user", UserSchema);
 
