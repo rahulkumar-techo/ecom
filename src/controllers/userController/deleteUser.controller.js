@@ -3,7 +3,7 @@ import User from "../../models/user.model.js";
 
 const deleteUser = async(req,res,next) =>{
 
-    const { id } = req.params;
+  const { id } = req.params;
 
     try {
       const user = await User.findByIdAndDelete(id);
@@ -17,7 +17,7 @@ const deleteUser = async(req,res,next) =>{
       return res.status(200).json(response);
     } catch (error) {
       console.error(error);
-      return res.status(500).json(new Response(false, 500, "Internal Server Error"));
+      return res.status(500).json(new Response(false, 500, "Internal Server Error",error));
     }
 }
 

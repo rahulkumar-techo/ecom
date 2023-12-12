@@ -3,8 +3,10 @@ import app from "./app.js";
 import db_connection from "./src/configs/db.js";
 import express from "express";
 import cookieParser from "cookie-parser";
+import morgan from "morgan";
 import router from "./src/routers/auth.routers.js";
-import productCatRouter from "./src/routers/blogProductCategory.router.js";
+// import productCatRouter from "./src/routers/blogProductCategory.router.js";
+import product_router from "./src/routers/product.router.js";
 
 const port = process.env.PORT;
 
@@ -13,12 +15,14 @@ db_connection();
 
 // Use middlewares
 app.use(cookieParser());
+app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Use routers
 app.use("/api/v1", router);
-app.use("/api/v1/blog-category", productCatRouter);
+app.use("/api/v1/product",product_router);
+
 
 // Error handler middleware for unhandled errors
 app.use((err, req, res, next) => {

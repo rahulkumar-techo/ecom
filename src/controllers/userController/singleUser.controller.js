@@ -17,7 +17,7 @@ const singleUser = async (req, res, next) => {
     return res.status(200).json(response);
   } catch (error) {
     console.error(error);
-    return res.status(500).json(new Response(false, 500, "Internal Server Error"));
+    return res.status(500).json(new Response(false, 500, "Internal Server Error single"));
   }
 };
 

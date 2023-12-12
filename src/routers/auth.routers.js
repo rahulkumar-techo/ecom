@@ -18,27 +18,39 @@ import {
   unblockUser,
 } from "../controllers/blockUnblock/blockUnblock.controller.js";
 
-// <=============Refresh token============> 
+// <=============Refresh token============>
 // Getting refresh Token from Handler repo.
 import HandleRefreshToken from "../../Handler/HandleRefreshToken.js";
 import logout from "../controllers/logoutUser.controller.js";
-router.route("/refresh").get(HandleRefreshToken)
+import updatePassword from "../controllers/userController/updatePass.controller.js";
+import forgotPassToken from "../controllers/userController/forgotPassToken.controller.js";
+import reset_password from "../controllers/userController/resetPassword.controller.js";
 
-// <=======🔄️==Routers==🔄️===========>
+// refresh token
+router.route("/refresh").get(HandleRefreshToken);
+
+// <=======🔄️==Routers [register and login]==🔄️===========>
 router.route("/register").post(expressAsyncHandler(registerController));
 router.route("/login").post(expressAsyncHandler(loginUser));
-// getusers
-router.route("/get-all").get(expressAsyncHandler(allUser));
-router.route("/logout").get(expressAsyncHandler(logout))
-router.route("/:id").get(authMiddleware, expressAsyncHandler(singleUser));
 
+// getusers,logout,singleuser
+router.route("/get-all").get(expressAsyncHandler(allUser));
+router.route("/logout").get(authMiddleware, expressAsyncHandler(logout));
+router.route("/:id").get(authMiddleware, expressAsyncHandler(singleUser));
 
 //deleteuser or deleteUsers
 router.route("/:id").delete(expressAsyncHandler(deleteUser));
 
-//updates
+//updates password and user
 router.route("/edit-user").put(authMiddleware, expressAsyncHandler(updateUser));
 
+router
+  .route("/update-password/:id")
+  .put(authMiddleware, expressAsyncHandler(updatePassword));
+
+router.route("/forgot-password-token").post(expressAsyncHandler(forgotPassToken));
+
+router.route("/reset-password/:token").put(expressAsyncHandler(reset_password))
 // block unblock
 router
   .route("/blocked-user/:id")

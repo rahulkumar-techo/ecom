@@ -44,7 +44,7 @@ const loginUser = async (req, res, next) => {
     console.error(error);
     return res
       .status(500)
-      .json(new Response(false, 500, error.message || "Internal Server Error"));
+      .json(new Response(false, 500, error.message || "Internal Server Error logs"));
   }
 };
 
