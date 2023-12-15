@@ -9,6 +9,7 @@ const getProduct = async (req, res) => {
       return new Response(false, 500, "Product id not found").send(res);
     }
     const product =  await Product.findById(id);
+    
 
     if (!product) {
       return new Response(false, 500, "Product not Found").send(res);

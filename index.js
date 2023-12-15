@@ -7,6 +7,7 @@ import morgan from "morgan";
 import router from "./src/routers/auth.routers.js";
 // import productCatRouter from "./src/routers/blogProductCategory.router.js";
 import product_router from "./src/routers/product.router.js";
+import blog_router from "./src/routers/blog.routes.js";
 
 const port = process.env.PORT;
 
@@ -22,6 +23,7 @@ app.use(express.urlencoded({ extended: false }));
 // Use routers
 app.use("/api/v1", router);
 app.use("/api/v1/product",product_router);
+app.use("/api/v1/blog",blog_router)
 
 
 // Error handler middleware for unhandled errors

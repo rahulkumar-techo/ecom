@@ -6,6 +6,10 @@ const isAdmin = expressAsyncHandler(async (req, res, next) => {
   const { email } = req.user;
 
   try {
+
+    if(!email){
+      return new Response(false, 401, "Not a valid email form admin").send(res);
+    }
     const adminUser = await User.findOne({ email });
 
     if (!adminUser || adminUser.role !== "admin") {
