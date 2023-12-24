@@ -11,11 +11,12 @@ const deleteBlog = async (req, res) => {
       return new Response(false, 500, "Invalid Object Id").send(res);
 
     const delete_blog = await Blog.findByIdAndDelete(id);
-    if (delete_blog) {
+    
+    if (!delete_blog) {
       return new Response(false, 500, "Blog not deleted");
     }
     console.log("deleted");
-    new Response(true, 201, delete_blog).send(res);
+    new Response(true, 201, delete_blog).send(res).send(res);
   } catch (error) {
     throw new Error(error);
   }

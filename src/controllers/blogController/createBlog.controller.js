@@ -13,7 +13,7 @@ const createBlog = async (req, res) => {
         `Invalid Input: Title, Descriptions, and Category are required`
       ).send(res);
     }
-    const newBlog = await Blog.create(req.body);
+    const newBlog = await Blog.create(req.body); 
     new Response(true, 200, newBlog).send(res);
   } catch (error) {
     throw new Error(error);

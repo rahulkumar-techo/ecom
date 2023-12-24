@@ -8,20 +8,12 @@ const updateUser = async (req, res) => {
       return res.status(401).json(new Response(false, 401, "Unauthorized"));
     }
 
-    const userId = req.user.id; // Assuming req.user contains the user object
+    const userId = req.user.id;
     const { username, email, phone } = req.body;
 
     console.log(userId); // Logging the user ID for verification purposes
 
-    if (!username || !email || !phone) {
-      return res.status(400).json(new Response(false, 400, "Invalid input"));
-    }
-
-    const updatedUser = await User.findByIdAndUpdate(userId, {
-      username,
-      email,
-      phone,
-    }, { new: true });
+    const updatedUser = await User.findByIdAndUpdate(userId, req?.body, { new: true });
 
     if (!updatedUser) {
       return res.status(404).json(new Response(false, 404, "User not found"));

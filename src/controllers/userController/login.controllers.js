@@ -34,7 +34,9 @@ const loginUser = async (req, res, next) => {
     }
 
     // Store the token in a cookie
-    const expirationDate = new Date(Date.now() + 9000000);
+    const days=30;
+    const time_durations = days * 24 * 60 * 60 * 1000;
+    const expirationDate = new Date(Date.now() + time_durations);
     res.cookie("refreshToken", refreshToken, { expires: expirationDate, httpOnly: false });
     console.log(`User has logged in successfully 🍀 `);
 

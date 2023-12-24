@@ -9,13 +9,18 @@ import updateProduct from "../controllers/productController/updateProduct.contro
 import deleteProduct from "../controllers/productController/deleteProduct.controller.js";
 import getProduct from "../controllers/productController/getProduct.controller.js";
 import getAllProduct from "../controllers/productController/getAllProduct.controller.js";
+import { wishList } from "../controllers/productController/wishListProduct.contoller.js";
+import ratingController from "../controllers/productController/rating.controller.js";
 //<======🔅=route=🔅=======>
 const product_router = express.Router();
-
+product_router.route("/wishlist").put(authMiddleware, expressAsyncHandler(wishList));
+product_router.route("/rating").put(authMiddleware,isAdmin,expressAsyncHandler(ratingController));
 product_router.route("/").post(expressAsyncHandler(createProduct));
 product_router.route("/get-all").get(expressAsyncHandler(getAllProduct));
 product_router.route("/:id").put(authMiddleware,isAdmin,expressAsyncHandler(updateProduct));
 product_router.route("/:id").delete(authMiddleware,isAdmin,expressAsyncHandler(deleteProduct));
 product_router.route("/:id").get(authMiddleware,isAdmin,expressAsyncHandler(getProduct));
+
+
 
 export default product_router;

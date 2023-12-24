@@ -26,6 +26,7 @@ import updatePassword from "../controllers/userController/updatePass.controller.
 import forgotPassToken from "../controllers/userController/forgotPassToken.controller.js";
 import reset_password from "../controllers/userController/resetPassword.controller.js";
 
+
 // refresh token
 router.route("/refresh").get(HandleRefreshToken);
 
@@ -48,9 +49,11 @@ router
   .route("/update-password/:id")
   .put(authMiddleware, expressAsyncHandler(updatePassword));
 
-router.route("/forgot-password-token").post(expressAsyncHandler(forgotPassToken));
+router
+  .route("/forgot-password-token")
+  .post(expressAsyncHandler(forgotPassToken));
 
-router.route("/reset-password/:token").put(expressAsyncHandler(reset_password))
+router.route("/reset-password/:token").put(expressAsyncHandler(reset_password));
 // block unblock
 router
   .route("/blocked-user/:id")
@@ -59,5 +62,7 @@ router
 router
   .route("/unblock-user/:id")
   .put(authMiddleware, isAdmin, expressAsyncHandler(unblockUser));
+
+
 
 export default router;

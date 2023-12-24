@@ -21,7 +21,7 @@ const getIndividualBlog = async (req, res) => {
       return new Response(
         false,
         500,
-        "blog and view or Individual not updated "
+        "item not found "
       ).send(res);
     }
     console.log({"views": incViews.numViews});
