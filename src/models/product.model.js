@@ -57,6 +57,9 @@ const productSchema = new mongoose.Schema(
         },
       },
     ],
+    totalRating: {
+      type: Number,
+    },
   },
   {
     timestamps: true,

@@ -25,12 +25,27 @@ import logout from "../controllers/logoutUser.controller.js";
 import updatePassword from "../controllers/userController/updatePass.controller.js";
 import forgotPassToken from "../controllers/userController/forgotPassToken.controller.js";
 import reset_password from "../controllers/userController/resetPassword.controller.js";
+import { applyCoupon, emptyCart, getUserCart, getwishlistUser, userCart } from "../controllers/userController/component.controller.js";
+import { createOrder, getAllOrders, getOrders, saveAddress, updateOrderStatus } from "../controllers/userController/order.controller.js";
 
 
 // refresh token
 router.route("/refresh").get(HandleRefreshToken);
 
 // <=======🔄️==Routers [register and login]==🔄️===========>
+router.route("/applycoupon").post(authMiddleware,expressAsyncHandler(applyCoupon));
+router.route("/emptycart").delete(authMiddleware,expressAsyncHandler(emptyCart));
+router.route("/cart").get(authMiddleware,expressAsyncHandler(getUserCart));
+router.route("/cart").post(authMiddleware,expressAsyncHandler(userCart));
+router.route("/wishlist").get(authMiddleware,expressAsyncHandler(getwishlistUser));
+// ORDERs
+router.route("/get-order").get(authMiddleware,expressAsyncHandler(getOrders));
+router.route("/getallorder").get(authMiddleware,isAdmin,expressAsyncHandler(getAllOrders));
+router.route("/getorderbyuser/:id").post(authMiddleware,isAdmin,expressAsyncHandler(getAllOrders));
+router.route("/save-address").put(authMiddleware,expressAsyncHandler(saveAddress))
+router.route("/order/update-order/:id").put(authMiddleware,isAdmin,expressAsyncHandler(updateOrderStatus))
+router.route("/cart/cash-order").post(authMiddleware,isAdmin,expressAsyncHandler(createOrder))
+// loging
 router.route("/register").post(expressAsyncHandler(registerController));
 router.route("/login").post(expressAsyncHandler(loginUser));
 
@@ -62,6 +77,9 @@ router
 router
   .route("/unblock-user/:id")
   .put(authMiddleware, isAdmin, expressAsyncHandler(unblockUser));
+
+
+
 
 
 

@@ -103,10 +103,10 @@ const productImgResize = async (req, res, next) => {
         .resize(300, 300)
         .toFormat("jpeg")
         .jpeg({ quality: 90 })
-        .toFile(`public/products/${file.filename}`);
-      fs.unlinkSync(`public/products/${file.filename}`);
+        .toFile(`public/blog/${file.filename}`);
+      fs.unlinkSync(`public/blog/${file.filename}`);
     })
   );
   next();
 };
-export { blogImgResize };
+export { blogImgResize,productImgResize };

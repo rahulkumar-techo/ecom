@@ -12,6 +12,9 @@ import categories_route from "./src/routers/category.routes.js";
 import blogCat_router from "./src/routers/blogCat.routes.js";
 import brand_router from "./src/routers/brand.routes.js";
 import productCat_route from "./src/routers/productCat.routes.js";
+import coupon_router from "./src/routers/coupon.routes.js";
+import color_router from "./src/routers/color.routes.js";
+import enquiry_router from "./src/routers/enquiry.routes.js";
 
 const port = process.env.PORT;
 
@@ -29,7 +32,10 @@ app.use(express.static("./upload"));
 // version of your app.
 const v1 = "v1";
 // working routes
-app.use(`/api/${v1}/productcat`, productCat_route)
+app.use(`/api/${v1}/enquiry`,enquiry_router);
+app.use(`/api/${v1}/color`,color_router);
+app.use(`/api/${v1}/coupon`,coupon_router);
+app.use(`/api/${v1}/productcat`, productCat_route);
 app.use(`/api/${v1}/product`, product_router);
 app.use(`/api/${v1}/blog`, blog_router);
 app.use(`/api/${v1}/category`, categories_route);

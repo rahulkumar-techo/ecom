@@ -11,16 +11,36 @@ import getProduct from "../controllers/productController/getProduct.controller.j
 import getAllProduct from "../controllers/productController/getAllProduct.controller.js";
 import { wishList } from "../controllers/productController/wishListProduct.contoller.js";
 import ratingController from "../controllers/productController/rating.controller.js";
+import cloudinaryUtils, {
+  productImgResize,
+} from "../utils/cloudinary.utils.js";
+import upload from "../middlewares/multer.middleware.js";
 //<======🔅=route=🔅=======>
 const product_router = express.Router();
-product_router.route("/wishlist").put(authMiddleware, expressAsyncHandler(wishList));
-product_router.route("/rating").put(authMiddleware,isAdmin,expressAsyncHandler(ratingController));
-product_router.route("/").post(expressAsyncHandler(createProduct));
+product_router
+  .route("/wishlist")
+  .put(authMiddleware, expressAsyncHandler(wishList));
+product_router
+  .route("/rating")
+  .put(authMiddleware, expressAsyncHandler(ratingController));
 product_router.route("/get-all").get(expressAsyncHandler(getAllProduct));
-product_router.route("/:id").put(authMiddleware,isAdmin,expressAsyncHandler(updateProduct));
-product_router.route("/:id").delete(authMiddleware,isAdmin,expressAsyncHandler(deleteProduct));
-product_router.route("/:id").get(authMiddleware,isAdmin,expressAsyncHandler(getProduct));
-
-
+product_router
+  .route("/")
+  .post(authMiddleware, isAdmin, expressAsyncHandler(createProduct));
+product_router
+  .route("/:id")
+  .put(authMiddleware, isAdmin, expressAsyncHandler(updateProduct));
+product_router
+  .route("/:id")
+  .delete(authMiddleware, isAdmin, expressAsyncHandler(deleteProduct));
+product_router.route("/:id").get(expressAsyncHandler(getProduct));
+product_router
+  .route("/upload-images/:id")
+  .put(
+    authMiddleware,
+    productImgResize,
+    upload.array("product-image", 5),
+    expressAsyncHandler(cloudinaryUtils)
+  );
 
 export default product_router;
