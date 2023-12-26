@@ -12,10 +12,12 @@ import {
   like_blog,
   dislike_blog,
 } from "../controllers/blogController/like&dislike.controller.js";
+import  {  uploadImages } from "../utils/cloudinary.utils.js";
+import upload from "../middlewares/multer.middleware.js";
+
 
 // cloudinary
-import cloudinaryUtils, { blogImgResize } from "../utils/cloudinary.utils.js";
-import upload from "../middlewares/multer.middleware.js";
+
 
 
 const blog_router = express.Router();
@@ -47,9 +49,9 @@ blog_router
   .put(
     authMiddleware,
     isAdmin,
-    blogImgResize,
+    // blogImgResize,
     upload.array("blogImage",5),
-    expressAsyncHandler(cloudinaryUtils)
+    expressAsyncHandler(uploadImages)
   );
 
 export default blog_router;

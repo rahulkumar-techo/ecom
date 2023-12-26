@@ -15,6 +15,7 @@ import productCat_route from "./src/routers/productCat.routes.js";
 import coupon_router from "./src/routers/coupon.routes.js";
 import color_router from "./src/routers/color.routes.js";
 import enquiry_router from "./src/routers/enquiry.routes.js";
+import upload_router from "./src/routers/upload.routes.js";
 
 const port = process.env.PORT;
 
@@ -32,6 +33,7 @@ app.use(express.static("./upload"));
 // version of your app.
 const v1 = "v1";
 // working routes
+app.use(`/api/${v1}/upload`,upload_router)
 app.use(`/api/${v1}/enquiry`,enquiry_router);
 app.use(`/api/${v1}/color`,color_router);
 app.use(`/api/${v1}/coupon`,coupon_router);
