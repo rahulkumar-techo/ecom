@@ -34,6 +34,7 @@ product_router
   .route("/:id")
   .delete(authMiddleware, isAdmin, expressAsyncHandler(deleteProduct));
 product_router.route("/:id").get(expressAsyncHandler(getProduct));
+
 product_router
   .route("/upload-images/:id")
   .put(
